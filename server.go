@@ -54,7 +54,7 @@ func main() {
 	
 	// Route	
 	mux := http.NewServeMux()
-	mux.HandleFunc("/product", productHandler.Product)
+	mux.HandleFunc("/product/v1", productHandler.Product)
 
 	http.ListenAndServe(PORT, mux)
 }
