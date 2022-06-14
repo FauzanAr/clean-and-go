@@ -16,7 +16,12 @@ func NewProductDomain(productRepository product.Repository) product.Domain {
 	}
 }
 
-func (uc *ProductDomain) Fetch(ctx context.Context) error {
+func (uc *ProductDomain) GetAll(ctx context.Context) (error, []*product.Entity) {
+	err, product := uc.productRepository.Fetch(ctx)
 
-	return nil
+	if err != nil {
+		return err, nil
+	}
+
+	return nil, product
 }
