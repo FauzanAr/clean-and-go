@@ -34,6 +34,8 @@ func (handler *ProductHandler) Product(w http.ResponseWriter, r *http.Request) {
 		}
 
 		return
+	default:
+		response.ResponseErr(w, response.MethodNotAllowed(nil))
 	}
 }
 
@@ -58,7 +60,13 @@ func(handler *ProductHandler) GetOne(w http.ResponseWriter, r *http.Request) {
 		response.ResponseErr(w, response.BadRequest("id must be integer"))
 		return
 	}
+
 	err, res := handler.productDomain.GetById(r.Context(), id)
+
+	if err != nil {
+		response.ResponseErr(w, err)
+		return
+	}
 
 	response.Response(w, res, "Success", 200, 200)
 	return

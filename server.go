@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/FauzanAr/clean-and-go/helpers/logger"
 	"github.com/FauzanAr/clean-and-go/modules/product/domain"
 	product_handler "github.com/FauzanAr/clean-and-go/modules/product/handler"
 	"github.com/FauzanAr/clean-and-go/modules/product/repository"
@@ -56,5 +57,9 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/product/v1", productHandler.Product)
 
-	http.ListenAndServe(PORT, mux)
+	errServer := http.ListenAndServe(PORT, mux)
+	
+	if err != nil {
+		logger.ErrorLogger.Fatal(errServer.Error())
+	}
 }

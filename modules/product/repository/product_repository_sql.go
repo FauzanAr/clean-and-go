@@ -19,9 +19,8 @@ func NewProductRepositoryMysql(db *sql.DB) product.Repository {
 	}
 }
 
-func (r *ProductRepositoryMysql) Fetch(ctx context.Context, args ...interface{}) (error, []*product.Entity) {
+func (r *ProductRepositoryMysql) Fetch(ctx context.Context,query string, args ...interface{}) (error, []*product.Entity) {
 	loc := "[ProductRepository-Fetch]"
-	query := `SELECT id, brand_id, name, description, price, stock, created_at, updated_at FROM products`
 	stmt, err := r.DB.PrepareContext(ctx, query)
 	defer stmt.Close()
 
@@ -70,7 +69,8 @@ func (r *ProductRepositoryMysql) Fetch(ctx context.Context, args ...interface{})
 
 func (r *ProductRepositoryMysql) GetAll(ctx context.Context) (error, []*product.Entity) {
 	loc := "[ProductRepository-GetAll]"
-	err, data := r.Fetch(ctx)
+	query := `SELECT id, brand_id, name, description, price, stock, created_at, updated_at FROM products`
+	err, data := r.Fetch(ctx, query)
 
 	if err != nil {
 		return err, nil
@@ -81,8 +81,20 @@ func (r *ProductRepositoryMysql) GetAll(ctx context.Context) (error, []*product.
 }
 
 func (r *ProductRepositoryMysql) GetOne(ctx context.Context, id int) (error, *product.Entity) {
-	
-	return nil, nil
+	loc := "[ProductRepository-GetOne]"
+	query := `SELECT id, brand_id, name, description, price, stock, created_at, updated_at FROM products WHERE id = ?`
+	err, data := r.Fetch(ctx, query, id)
+
+	if err != nil {
+		return err, nil
+	}
+
+	if len(data) > 0 {
+		return nil, data[0]
+	}
+
+	logger.InfoLogger.Println(loc + "Successfully get data")
+	return response.NotFound(nil), nil
 }
 
 func (r *ProductRepositoryMysql) Insert(ctx context.Context) error {
