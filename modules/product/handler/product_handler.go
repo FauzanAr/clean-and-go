@@ -1,11 +1,13 @@
 package product_handler
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 
 	"github.com/FauzanAr/clean-and-go/helpers/logger"
 	"github.com/FauzanAr/clean-and-go/helpers/response"
+	"github.com/FauzanAr/clean-and-go/helpers/validator"
 	"github.com/FauzanAr/clean-and-go/modules/product"
 )
 
@@ -73,5 +75,30 @@ func(handler *ProductHandler) GetOne(w http.ResponseWriter, r *http.Request) {
 }
 
 func(handler *ProductHandler) Post(w http.ResponseWriter, r *http.Request) {
+	var body product.Entity
+	err := json.NewDecoder(r.Body).Decode(&body)
 
+	if err != nil {
+		response.ResponseErr(w, response.BadRequest("Error in decode the request: " + err.Error()))
+		return
+	}
+
+	validate := validator.New()
+	errValidate := validate.Struct(body)
+
+	if errValidate != nil {
+		err := response.BadRequest(errValidate.Error())
+		response.ResponseErr(w, err)
+		return
+	}
+
+	errCreate := handler.productDomain.Create(r.Context(), &body)
+
+	if errCreate != nil {
+		response.ResponseErr(w, errCreate)
+		return
+	}
+
+	response.Response(w, nil, "Success created", 201, 201)
+	return
 }

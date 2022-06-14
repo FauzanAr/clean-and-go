@@ -14,9 +14,11 @@ type CustomValidator struct {
 }
 
 func (cv *CustomValidator) Validate(i interface{}) error {
-
+	validate := cv.Validator.Struct(i)
+	fmt.Println("masok" + validate.Error())
 	if cv.Validator.Struct(i) != nil {
 		var errorMsg string
+		fmt.Println("Masok")
 		errs := cv.Validator.Struct(i).(validator.ValidationErrors)
 
 		// Register custom message for the tags

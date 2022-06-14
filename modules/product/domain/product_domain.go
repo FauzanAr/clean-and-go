@@ -2,6 +2,7 @@ package domain
 
 import (
 	"context"
+	"time"
 
 	"github.com/FauzanAr/clean-and-go/modules/product"
 )
@@ -34,4 +35,17 @@ func (uc *ProductDomain) GetById(ctx context.Context, id int) (error, *product.E
 	}
 
 	return nil, product
+}
+
+func (uc *ProductDomain) Create(ctx context.Context, data *product.Entity) error {
+	data.CreatedAt = int(time.Now().Unix())
+	data.UpdatedAt = int(time.Now().Unix())
+
+	err := uc.productRepository.Insert(ctx, data)
+
+	if err != nil {
+		return err
+	}
+	
+	return nil
 }

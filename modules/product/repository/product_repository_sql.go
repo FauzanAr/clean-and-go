@@ -97,6 +97,23 @@ func (r *ProductRepositoryMysql) GetOne(ctx context.Context, id int) (error, *pr
 	return response.NotFound(nil), nil
 }
 
-func (r *ProductRepositoryMysql) Insert(ctx context.Context) error {
+func (r *ProductRepositoryMysql) Insert(ctx context.Context, d *product.Entity) error {
+	loc := "[ProductRepository-Insert]"
+	query := `INSERT products SET brand_id=?, name=?, description=?, price=?, stock=?, created_at=?, updated_at=?`
+	stmt, err := r.DB.PrepareContext(ctx, query)
+	defer stmt.Close()
+
+	if err != nil {
+		logger.ErrorLogger.Println(loc + err.Error())
+		return response.InternalServerErr(err.Error())
+	}
+
+	_, errExec := r.DB.ExecContext(ctx, query, d.BrandId, d.Name, d.Description, d.Price, d.Stock, d.CreatedAt, d.UpdatedAt)
+	
+	if errExec != nil {
+		logger.ErrorLogger.Println(loc + errExec.Error())
+		return response.InternalServerErr(errExec.Error())
+	}
+
 	return nil
 }

@@ -8,13 +8,14 @@ import (
 type Domain interface {
 	GetAll(ctx context.Context) (error, []*Entity)
 	GetById(ctx context.Context, id int) (error, *Entity)
+	Create(ctx context.Context, data *Entity) error
 }
 
 type Repository interface {
 	GetAll(ctx context.Context) (error, []*Entity)
 	GetOne(ctx context.Context, id int) (error, *Entity)
 	Fetch(ctx context.Context, query string, args ...interface{}) (error, []*Entity)
-	Insert(ctx context.Context) error
+	Insert(ctx context.Context, data *Entity) error
 }
 
 type Handler interface {
@@ -26,11 +27,11 @@ type Handler interface {
 
 type Entity struct {
 	ID			int		`json:"id"`
-	BrandId		int		`json:"brandId"`
-	Name		string	`json:"name"`
-	Description	string	`json:"description"`
-	Price		int		`json:"price"`
-	Stock		int		`json:"stock"`
+	BrandId		int		`json:"brandId" validate:"required"`
+	Name		string	`json:"name" validate:"required"`
+	Description	string	`json:"description" validate:"required"`
+	Price		int		`json:"price" validate:"required"`
+	Stock		int		`json:"stock" validate:"required"`
 	CreatedAt	int		`json:"createdAt"`
 	UpdatedAt	int		`json:"updatedAt"`
 }
