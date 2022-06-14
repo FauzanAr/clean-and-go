@@ -80,7 +80,8 @@ func (r *ProductRepositoryMysql) GetAll(ctx context.Context) (error, []*product.
 	return nil, data
 }
 
-func (r *ProductRepositoryMysql) GetOne(ctx context.Context) (error, *product.Entity) {
+func (r *ProductRepositoryMysql) GetOne(ctx context.Context, id int) (error, *product.Entity) {
+	
 	return nil, nil
 }
 

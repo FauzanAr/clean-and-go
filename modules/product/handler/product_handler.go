@@ -2,6 +2,7 @@ package product_handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/FauzanAr/clean-and-go/helpers/logger"
 	"github.com/FauzanAr/clean-and-go/helpers/response"
@@ -50,7 +51,17 @@ func(handler *ProductHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func(handler *ProductHandler) GetOne(w http.ResponseWriter, r *http.Request) {
+	param := r.URL.Query()["id"]
+	id, err := strconv.Atoi(param[0])
 
+	if err != nil {
+		response.ResponseErr(w, response.BadRequest("id must be integer"))
+		return
+	}
+	err, res := handler.productDomain.GetById(r.Context(), id)
+
+	response.Response(w, res, "Success", 200, 200)
+	return
 }
 
 func(handler *ProductHandler) Post(w http.ResponseWriter, r *http.Request) {

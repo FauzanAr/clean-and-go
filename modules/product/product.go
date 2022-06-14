@@ -7,11 +7,12 @@ import (
 
 type Domain interface {
 	GetAll(ctx context.Context) (error, []*Entity)
+	GetById(ctx context.Context, id int) (error, *Entity)
 }
 
 type Repository interface {
 	GetAll(ctx context.Context) (error, []*Entity)
-	GetOne(ctx context.Context) (error, *Entity)
+	GetOne(ctx context.Context, id int) (error, *Entity)
 	Fetch(ctx context.Context, args ...interface{}) (error, []*Entity)
 	Insert(ctx context.Context) error
 }

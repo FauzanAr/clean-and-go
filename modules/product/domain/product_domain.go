@@ -25,3 +25,13 @@ func (uc *ProductDomain) GetAll(ctx context.Context) (error, []*product.Entity) 
 
 	return nil, product
 }
+
+func (uc *ProductDomain) GetById(ctx context.Context, id int) (error, *product.Entity) {
+	err, product := uc.productRepository.GetOne(ctx, id)
+
+	if err != nil {
+		return err, nil
+	}
+
+	return nil, product
+}

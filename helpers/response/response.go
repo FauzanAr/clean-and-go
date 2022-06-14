@@ -59,6 +59,24 @@ func GetErrorType(err interface{}) CommonError {
 		errData.Message = obj.Message
 		errData.ResponseCode = http.StatusBadRequest
 		return errData
+	case InternalServerError:
+		errData.Code = obj.Code
+		errData.Data = obj.Data
+		errData.Message = obj.Message
+		errData.ResponseCode = http.StatusInternalServerError
+		return errData
+	case NotFoundError:
+		errData.Code = obj.Code
+		errData.Data = obj.Data
+		errData.Message = obj.Message
+		errData.ResponseCode = http.StatusNotFound
+		return errData
+	case MethodNotAllowedError:
+		errData.Code = obj.Code
+		errData.Data = obj.Data
+		errData.Message = obj.Message
+		errData.ResponseCode = http.StatusMethodNotAllowed
+		return errData
 	default:
 		errData.ResponseCode = http.StatusInternalServerError
 		return errData
