@@ -14,7 +14,7 @@ type Repository interface {
 
 type Domain interface {
 	GetAllByEmail(ctx context.Context, email string) (error, []*Entity)
-	GetById(ctx context.Context, id int) (error, *Entity)
+	GetById(ctx context.Context, id int, email string) (error, *Entity)
 	Create(ctx context.Context, body *Entity) error
 }
 

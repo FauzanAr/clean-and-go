@@ -101,5 +101,19 @@ func (r *TransactionRepositoryMysql) GetByEmail(ctx context.Context, email strin
 }
 
 func (r *TransactionRepositoryMysql) GetById(ctx context.Context, id int) (error, *transaction.Entity) {
+	loc := "[TransactionRepository-GetById]"
+	query := `SELECT id, product_id, qty, total_price, email, created_at, updated_at FROM transactions WHERE id = ?`
+	err, data := r.Fetch(ctx, query, id)
+
+	if err != nil {
+		return err, nil
+	}
+
+	if len(data) > 0 {
+		logger.InfoLogger.Println(loc + "Successfully get data")
+		return nil, data[0]
+	}
+
+	logger.InfoLogger.Println(loc + "Successfully get data")
 	return nil, nil
 }

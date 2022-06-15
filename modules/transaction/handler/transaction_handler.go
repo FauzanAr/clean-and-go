@@ -3,6 +3,7 @@ package transaction_handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/FauzanAr/clean-and-go/helpers/response"
@@ -63,6 +64,27 @@ func (h *TransactionHandler) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *TransactionHandler) GetDetail(w http.ResponseWriter, r *http.Request) {
+	param := r.URL.Query()
+	email := strings.TrimSpace(param["email"][0])
+	id, err := strconv.Atoi(param["id"][0])
+
+	if email == "" {
+		response.ResponseErr(w, response.BadRequest("email cannot be empty"))
+		return
+	}
+
+	if err != nil {
+		response.ResponseErr(w, response.BadRequest("id cannot be empty and must be integer"))
+		return
+	}
+
+	err, res := h.td.GetById(r.Context(), id, email)
+	if err != nil {
+		response.ResponseErr(w, err)
+		return
+	}
+
+	response.Response(w, res, "Success", 200, 200)
 	return
 }
 

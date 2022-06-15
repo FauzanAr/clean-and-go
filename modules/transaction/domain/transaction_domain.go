@@ -60,6 +60,20 @@ func (d *TransactionDomain) GetAllByEmail(ctx context.Context, email string) (er
 	return nil, transactions
 }
 
-func (d *TransactionDomain) GetById(ctx context.Context, id int) (error, *transaction.Entity) {
-	return nil, nil
+func (d *TransactionDomain) GetById(ctx context.Context, id int, email string) (error, *transaction.Entity) {
+	err, transaction := d.tr.GetById(ctx, id)
+
+	if err != nil {
+		return err, nil
+	}
+
+	if transaction == nil {
+		return nil, nil
+	}
+
+	if transaction.Email != email {
+		return response.Unauthorized("email not match with the transaction"), nil
+	}
+
+	return nil, transaction
 }
