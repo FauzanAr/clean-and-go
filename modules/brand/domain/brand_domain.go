@@ -2,6 +2,7 @@ package brand_domain
 
 import (
 	"context"
+	"time"
 
 	"github.com/FauzanAr/clean-and-go/modules/brand"
 )
@@ -24,4 +25,17 @@ func (d *BrandDomain) GetAll(ctx context.Context) (error, []*brand.Entity) {
 	}
 
 	return nil, brands
+}
+
+func (d *BrandDomain) Create(ctx context.Context, data *brand.Entity) error {
+	data.CreatedAt = int(time.Now().Unix())
+	data.UpdatedAt = int(time.Now().Unix())
+
+	err := d.brandRepository.Insert(ctx, data)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

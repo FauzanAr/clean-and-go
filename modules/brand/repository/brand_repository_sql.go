@@ -73,3 +73,24 @@ func (r *BrandRepositoryMysql) GetAll(ctx context.Context) (error, []*brand.Enti
 	logger.InfoLogger.Println(loc + "Successfully get data")
 	return nil, data
 }
+
+func (r *BrandRepositoryMysql) Insert(ctx context.Context, b *brand.Entity) error {
+	loc := "[BrandRepository-Insert]"
+	query := `INSERT brands SET name=?, description=?, created_at=?, updated_at=?`
+	stmt, err := r.DB.PrepareContext(ctx, query)
+	defer stmt.Close()
+
+	if err != nil {
+		logger.ErrorLogger.Println(loc + err.Error())
+		return response.InternalServerErr(err.Error())
+	}
+
+	_, errExec := r.DB.ExecContext(ctx, query, b.Name, b.Description, b.CreatedAt, b.UpdatedAt)
+
+	if errExec != nil {
+		logger.ErrorLogger.Println(loc + errExec.Error())
+		return response.InternalServerErr(errExec.Error())
+	}
+
+	return nil
+}
