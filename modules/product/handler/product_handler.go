@@ -38,11 +38,12 @@ func (handler *ProductHandler) Product(w http.ResponseWriter, r *http.Request) {
 		return
 	default:
 		response.ResponseErr(w, response.MethodNotAllowed(nil))
+		return
 	}
 }
 
 func(handler *ProductHandler) GetAll(w http.ResponseWriter, r *http.Request) {
-	err, res := handler.productDomain.GetAll(r.Context());
+	err, res := handler.productDomain.GetAll(r.Context())
 
 	if err != nil {
 		response.ResponseErr(w, err)

@@ -26,7 +26,7 @@ func (r *ProductRepositoryMysql) Fetch(ctx context.Context,query string, args ..
 
 	if err != nil {
 		logger.ErrorLogger.Println(loc + err.Error())
-		resErr := response.BadRequest(err.Error())
+		resErr := response.InternalServerErr(err.Error())
 		return resErr, nil
 	}
 
@@ -35,7 +35,7 @@ func (r *ProductRepositoryMysql) Fetch(ctx context.Context,query string, args ..
 
 	if err != nil {
 		logger.ErrorLogger.Println(loc + err.Error())
-		resErr := response.BadRequest(err.Error())
+		resErr := response.InternalServerErr(err.Error())
 		return resErr, nil
 	}
 
@@ -56,7 +56,7 @@ func (r *ProductRepositoryMysql) Fetch(ctx context.Context,query string, args ..
 
 		if err != nil {
 			logger.ErrorLogger.Println(loc + err.Error())
-			resErr := response.BadRequest(err.Error())
+			resErr := response.InternalServerErr(err.Error())
 			return resErr, nil
 		}
 

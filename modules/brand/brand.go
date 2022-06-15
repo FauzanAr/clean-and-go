@@ -18,6 +18,7 @@ type Domain interface {
 type Handler interface {
 	Brand(response http.ResponseWriter, request *http.Request)
 	GetAll(response http.ResponseWriter, request *http.Request)
+	Insert(response http.ResponseWriter, request *http.Request)
 }
 
 type Entity struct {

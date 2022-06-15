@@ -11,6 +11,9 @@ import (
 	"github.com/FauzanAr/clean-and-go/modules/product/domain"
 	"github.com/FauzanAr/clean-and-go/modules/product/handler"
 	"github.com/FauzanAr/clean-and-go/modules/product/repository"
+	"github.com/FauzanAr/clean-and-go/modules/brand/domain"
+	"github.com/FauzanAr/clean-and-go/modules/brand/handler"
+	"github.com/FauzanAr/clean-and-go/modules/brand/repository"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -52,11 +55,18 @@ func main() {
 	productRepo := product_repository.NewProductRepositoryMysql(dbConn)
 	productDomain := product_domain.NewProductDomain(productRepo)
 	productHandler := product_handler.NewProdutHandler(productDomain)
+
+	brandRepo := brand_repository.NewBrandRepositoryMysql(dbConn)
+	brandDomain := brand_domain.NewBrandDomain(brandRepo)
+	brandHandler := brand_handler.NewBrandHandler(brandDomain)
 	
 	// Route	
 	mux := http.NewServeMux()
+
 	mux.HandleFunc("/product/v1", productHandler.Product)
 	mux.HandleFunc("/product/v1/brand", productHandler.GetByBrand)
+
+	mux.HandleFunc("/brand/v1",  brandHandler.Brand)
 
 	errServer := http.ListenAndServe(PORT, mux)
 	
