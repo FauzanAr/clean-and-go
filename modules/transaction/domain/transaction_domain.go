@@ -51,5 +51,15 @@ func (d *TransactionDomain) Create(ctx context.Context, data *transaction.Entity
 }
 
 func (d *TransactionDomain) GetAllByEmail(ctx context.Context, email string) (error, []*transaction.Entity) {
+	err, transactions := d.tr.GetByEmail(ctx, email)
+
+	if err != nil {
+		return err, nil
+	}
+
+	return nil, transactions
+}
+
+func (d *TransactionDomain) GetById(ctx context.Context, id int) (error, *transaction.Entity) {
 	return nil, nil
 }

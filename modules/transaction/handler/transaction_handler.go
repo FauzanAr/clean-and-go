@@ -3,6 +3,7 @@ package transaction_handler
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/FauzanAr/clean-and-go/helpers/response"
 	"github.com/FauzanAr/clean-and-go/helpers/validator"
@@ -43,6 +44,21 @@ func (h *TransactionHandler) Transaction(w http.ResponseWriter, r *http.Request)
 }
 
 func (h *TransactionHandler) Get(w http.ResponseWriter, r *http.Request) {
+	param := r.URL.Query()["email"]
+	email := param[0]
+
+	if strings.TrimSpace(email) == "" {
+		response.ResponseErr(w, response.BadRequest("email cannot be empty"))
+		return
+	}
+
+	err, res := h.td.GetAllByEmail(r.Context(), email)
+	if err != nil {
+		response.ResponseErr(w, err)
+		return
+	}
+
+	response.Response(w, res, "Success", 200, 200)
 	return
 }
 
