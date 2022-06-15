@@ -7,8 +7,8 @@ import (
 
 type Repository interface {
 	Fetch(ctx context.Context, query string, args ...interface{}) (error, []*Entity)
-	GetByEmail(ctx context.Context, query string, args ...interface{}) (error, []*Entity)
-	Insert(ctx context.Context, query string, args ...interface{}) error
+	GetByEmail(ctx context.Context, email string) (error, []*Entity)
+	Insert(ctx context.Context, data *Entity) error
 }
 
 type Domain interface {

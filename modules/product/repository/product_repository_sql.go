@@ -3,6 +3,7 @@ package product_repository
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	"github.com/FauzanAr/clean-and-go/helpers/logger"
 	"github.com/FauzanAr/clean-and-go/helpers/response"
@@ -94,10 +95,12 @@ func (r *ProductRepositoryMysql) GetOne(ctx context.Context, id int) (error, *pr
 	}
 
 	logger.InfoLogger.Println(loc + "Successfully get data")
-	return response.NotFound(nil), nil
+	return nil, nil
 }
 
 func (r *ProductRepositoryMysql) Insert(ctx context.Context, d *product.Entity) error {
+	d.CreatedAt = int(time.Now().Unix())
+	d.UpdatedAt = int(time.Now().Unix())
 	loc := "[ProductRepository-Insert]"
 	query := `INSERT products SET brand_id=?, name=?, description=?, price=?, stock=?, created_at=?, updated_at=?`
 	stmt, err := r.DB.PrepareContext(ctx, query)
@@ -130,4 +133,26 @@ func (r *ProductRepositoryMysql) GetByBrand(ctx context.Context, id int) (error,
 
 	logger.InfoLogger.Println(loc + "Successfully get data")
 	return nil, data
+}
+
+func (r *ProductRepositoryMysql) Update(ctx context.Context, p *product.Entity) error {
+	p.UpdatedAt = int(time.Now().Unix())
+	loc := "[ProductRepository-Update]"
+	query := `UPDATE products SET brand_id=?, name=?, description=?, price=?, stock=?, created_at=?, updated_at=? WHERE id=?`
+	stmt, err := r.DB.PrepareContext(ctx, query)
+	defer stmt.Close()
+
+	if err != nil {
+		logger.ErrorLogger.Println(loc + err.Error())
+		return response.InternalServerErr(err.Error())
+	}
+
+	_, errExec := r.DB.ExecContext(ctx, query, p.BrandId, p.Name, p.Description, p.Price, p.Stock, p.CreatedAt, p.UpdatedAt, p.ID)
+
+	if errExec != nil {
+		logger.ErrorLogger.Println(loc + errExec.Error())
+		return response.InternalServerErr(errExec.Error())
+	}
+
+	return nil
 }

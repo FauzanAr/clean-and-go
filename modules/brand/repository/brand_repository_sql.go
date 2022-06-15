@@ -3,6 +3,7 @@ package brand_repository
 import (
 	"context"
 	"database/sql"
+	"time"
 
 	"github.com/FauzanAr/clean-and-go/helpers/logger"
 	"github.com/FauzanAr/clean-and-go/helpers/response"
@@ -75,6 +76,8 @@ func (r *BrandRepositoryMysql) GetAll(ctx context.Context) (error, []*brand.Enti
 }
 
 func (r *BrandRepositoryMysql) Insert(ctx context.Context, b *brand.Entity) error {
+	b.CreatedAt = int(time.Now().Unix())
+	b.UpdatedAt = int(time.Now().Unix())
 	loc := "[BrandRepository-Insert]"
 	query := `INSERT brands SET name=?, description=?, created_at=?, updated_at=?`
 	stmt, err := r.DB.PrepareContext(ctx, query)

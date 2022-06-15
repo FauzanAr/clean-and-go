@@ -2,7 +2,6 @@ package product_domain
 
 import (
 	"context"
-	"time"
 
 	"github.com/FauzanAr/clean-and-go/helpers/response"
 	"github.com/FauzanAr/clean-and-go/modules/brand"
@@ -42,9 +41,6 @@ func (uc *ProductDomain) GetById(ctx context.Context, id int) (error, *product.E
 }
 
 func (uc *ProductDomain) Create(ctx context.Context, data *product.Entity) error {
-	data.CreatedAt = int(time.Now().Unix())
-	data.UpdatedAt = int(time.Now().Unix())
-
 	err, existBrand := uc.brandRepository.GetById(ctx, data.ID)
 
 	if err != nil {

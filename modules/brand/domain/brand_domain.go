@@ -2,7 +2,6 @@ package brand_domain
 
 import (
 	"context"
-	"time"
 
 	"github.com/FauzanAr/clean-and-go/helpers/response"
 	"github.com/FauzanAr/clean-and-go/modules/brand"
@@ -29,9 +28,6 @@ func (d *BrandDomain) GetAll(ctx context.Context) (error, []*brand.Entity) {
 }
 
 func (d *BrandDomain) Create(ctx context.Context, data *brand.Entity) error {
-	data.CreatedAt = int(time.Now().Unix())
-	data.UpdatedAt = int(time.Now().Unix())
-
 	err, nameExist := d.brandRepository.GetByName(ctx, data.Name)
 
 	if err != nil {

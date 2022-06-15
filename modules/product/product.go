@@ -18,6 +18,7 @@ type Repository interface {
 	GetByBrand(ctx context.Context, id int) (error, []*Entity)
 	Fetch(ctx context.Context, query string, args ...interface{}) (error, []*Entity)
 	Insert(ctx context.Context, data *Entity) error
+	Update(ctx context.Context, data *Entity) error
 }
 
 type Handler interface {
