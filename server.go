@@ -9,7 +9,7 @@ import (
 
 	"github.com/FauzanAr/clean-and-go/helpers/logger"
 	"github.com/FauzanAr/clean-and-go/modules/product/domain"
-	product_handler "github.com/FauzanAr/clean-and-go/modules/product/handler"
+	"github.com/FauzanAr/clean-and-go/modules/product/handler"
 	"github.com/FauzanAr/clean-and-go/modules/product/repository"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -49,8 +49,8 @@ func main() {
 	}()
 	
 	// Declaration Modules
-	productRepo := repository.NewProductRepositoryMysql(dbConn)
-	productDomain := domain.NewProductDomain(productRepo)
+	productRepo := product_repository.NewProductRepositoryMysql(dbConn)
+	productDomain := product_domain.NewProductDomain(productRepo)
 	productHandler := product_handler.NewProdutHandler(productDomain)
 	
 	// Route	
