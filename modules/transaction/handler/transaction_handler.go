@@ -24,6 +24,18 @@ func (h *TransactionHandler) Transaction(w http.ResponseWriter, r *http.Request)
 	case "POST":
 		h.Post(w, r)
 		return
+	case "GET" :
+		query := r.URL.Query()
+		if query["id"] != nil && query["email"] != nil {
+			h.GetDetail(w, r)
+		} else if query["email"] != nil {
+			h.Get(w, r)
+		} else {
+			response.ResponseErr(w, response.Unauthorized("Required params 'emai' for authentication"))
+			break
+		}
+
+		return
 	default:
 		response.ResponseErr(w, response.MethodNotAllowed(nil))
 		return

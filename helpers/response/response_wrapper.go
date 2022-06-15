@@ -39,6 +39,13 @@ type MethodNotAllowedError struct {
 	Message			string		`json:"message"`
 }
 
+type UnauthorizedError struct {
+	Data			interface{} `json:"data"`
+	ResponseCode	int			`json:"responseCode"`
+	Code			int			`json:"code"`
+	Message			string		`json:"message"`
+}
+
 func (e BadRequestError) Error() string {
 	return e.Message
 }
@@ -52,6 +59,10 @@ func (e InternalServerError) Error() string {
 }
 
 func (e MethodNotAllowedError) Error() string {
+	return e.Message
+}
+
+func (e UnauthorizedError) Error() string {
 	return e.Message
 }
 
@@ -88,5 +99,14 @@ func MethodNotAllowed(data interface{}) error {
 		ResponseCode: http.StatusMethodNotAllowed,
 		Code: http.StatusMethodNotAllowed,
 		Message: "Method not allowed",
+	}
+}
+
+func Unauthorized(data interface{}) error {
+	return UnauthorizedError{
+		Data: data,
+		ResponseCode: http.StatusUnauthorized,
+		Code: http.StatusUnauthorized,
+		Message: "Unauthorized",
 	}
 }

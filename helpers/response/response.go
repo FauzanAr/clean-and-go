@@ -77,6 +77,12 @@ func GetErrorType(err interface{}) CommonError {
 		errData.Message = obj.Message
 		errData.ResponseCode = http.StatusMethodNotAllowed
 		return errData
+	case UnauthorizedError:
+		errData.Code = obj.Code
+		errData.Data = obj.Data
+		errData.Message = obj.Message
+		errData.ResponseCode = http.StatusUnauthorized
+		return errData
 	default:
 		errData.ResponseCode = http.StatusInternalServerError
 		return errData
