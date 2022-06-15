@@ -52,13 +52,13 @@ func main() {
 	}()
 	
 	// Declaration Modules
-	productRepo := product_repository.NewProductRepositoryMysql(dbConn)
-	productDomain := product_domain.NewProductDomain(productRepo)
-	productHandler := product_handler.NewProdutHandler(productDomain)
-
 	brandRepo := brand_repository.NewBrandRepositoryMysql(dbConn)
 	brandDomain := brand_domain.NewBrandDomain(brandRepo)
 	brandHandler := brand_handler.NewBrandHandler(brandDomain)
+	
+	productRepo := product_repository.NewProductRepositoryMysql(dbConn)
+	productDomain := product_domain.NewProductDomain(productRepo, brandRepo)
+	productHandler := product_handler.NewProdutHandler(productDomain)
 	
 	// Route	
 	mux := http.NewServeMux()

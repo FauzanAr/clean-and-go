@@ -113,3 +113,22 @@ func (r *BrandRepositoryMysql) GetByName(ctx context.Context, name string) (erro
 	logger.InfoLogger.Println(loc + "Successfully get data, got nil")
 	return nil, nil
 }
+
+func (r *BrandRepositoryMysql) GetById(ctx context.Context, id int) (error, *brand.Entity) {
+	loc := "[BrandRepository-GetById]"
+	query := `SELECT id, name, description, created_at, updated_at FROM brands WHERE id = ?`
+	err, data := r.Fetch(ctx, query, id)
+
+	if err != nil {
+		logger.ErrorLogger.Println(loc + err.Error())
+		return err, nil
+	}
+
+	if len(data) > 0 {
+		logger.InfoLogger.Println(loc + "Successfully get data")
+		return nil, data[0]
+	}
+
+	logger.InfoLogger.Println(loc + "Successfully get data, got nil")
+	return nil, nil
+}

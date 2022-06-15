@@ -11,6 +11,7 @@ type Repository interface {
 	GetAll(ctx context.Context) (error, []*Entity)
 	Insert(ctx context.Context, data *Entity) error
 	GetByName(ctx context.Context, name string) (error, *Entity)
+	GetById(ctx context.Context, id int) (error, *Entity)
 }
 
 type Domain interface {

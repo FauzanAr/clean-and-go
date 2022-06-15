@@ -4,16 +4,20 @@ import (
 	"context"
 	"time"
 
+	"github.com/FauzanAr/clean-and-go/helpers/response"
+	"github.com/FauzanAr/clean-and-go/modules/brand"
 	"github.com/FauzanAr/clean-and-go/modules/product"
 )
  
 type ProductDomain struct {
 	productRepository	product.Repository
+	brandRepository		brand.Repository
 }
 
-func NewProductDomain(productRepository product.Repository) product.Domain {
+func NewProductDomain(pr product.Repository, br brand.Repository) product.Domain {
 	return &ProductDomain{
-		productRepository: productRepository,
+		productRepository: pr,
+		brandRepository: br,
 	}
 }
 
@@ -41,10 +45,20 @@ func (uc *ProductDomain) Create(ctx context.Context, data *product.Entity) error
 	data.CreatedAt = int(time.Now().Unix())
 	data.UpdatedAt = int(time.Now().Unix())
 
-	err := uc.productRepository.Insert(ctx, data)
+	err, existBrand := uc.brandRepository.GetById(ctx, data.ID)
 
 	if err != nil {
 		return err
+	}
+
+	if existBrand == nil {
+		return response.NotFound("Invalid brand!")
+	}
+
+	errInsert := uc.productRepository.Insert(ctx, data)
+
+	if errInsert != nil {
+		return errInsert
 	}
 	
 	return nil
