@@ -102,3 +102,31 @@ func(handler *ProductHandler) Post(w http.ResponseWriter, r *http.Request) {
 	response.Response(w, nil, "Success created", 201, 201)
 	return
 }
+
+func (handler *ProductHandler) GetByBrand(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		response.ResponseErr(w, response.MethodNotAllowed(nil))
+		return
+	}
+
+	query, ok := r.URL.Query()["id"]
+	if !ok || len(query)== 0 {
+		response.ResponseErr(w, response.BadRequest("id cannot be null"))
+		return
+	}
+
+	id, err := strconv.Atoi(query[0])
+	if err != nil {
+		response.ResponseErr(w, response.BadRequest("id must be integer"))
+		return
+	}
+
+	err, res := handler.productDomain.GetByBrand(r.Context(), id)
+
+	if err != nil {
+		response.ResponseErr(w, err)
+		return
+	}
+	response.Response(w, res, "Success", 200, 200)
+	return
+}

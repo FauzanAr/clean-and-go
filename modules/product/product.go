@@ -8,12 +8,14 @@ import (
 type Domain interface {
 	GetAll(ctx context.Context) (error, []*Entity)
 	GetById(ctx context.Context, id int) (error, *Entity)
+	GetByBrand(ctx context.Context, id int) (error, []*Entity)
 	Create(ctx context.Context, data *Entity) error
 }
 
 type Repository interface {
 	GetAll(ctx context.Context) (error, []*Entity)
 	GetOne(ctx context.Context, id int) (error, *Entity)
+	GetByBrand(ctx context.Context, id int) (error, []*Entity)
 	Fetch(ctx context.Context, query string, args ...interface{}) (error, []*Entity)
 	Insert(ctx context.Context, data *Entity) error
 }
@@ -23,6 +25,7 @@ type Handler interface {
 	GetAll(response http.ResponseWriter, request *http.Request)
 	GetOne(response http.ResponseWriter, request *http.Request)
 	Post(response http.ResponseWriter, request *http.Request)
+	GetByBrand(response http.ResponseWriter, request *http.Request)
 }
 
 type Entity struct {

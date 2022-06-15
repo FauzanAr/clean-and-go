@@ -56,6 +56,7 @@ func main() {
 	// Route	
 	mux := http.NewServeMux()
 	mux.HandleFunc("/product/v1", productHandler.Product)
+	mux.HandleFunc("/product/v1/brand", productHandler.GetByBrand)
 
 	errServer := http.ListenAndServe(PORT, mux)
 	

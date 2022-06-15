@@ -117,3 +117,17 @@ func (r *ProductRepositoryMysql) Insert(ctx context.Context, d *product.Entity) 
 
 	return nil
 }
+
+func (r *ProductRepositoryMysql) GetByBrand(ctx context.Context, id int) (error, []*product.Entity) {
+	loc := "[ProductRepository-GetByBrand]"
+	query := `SELECT id, brand_id, name, description, price, stock, created_at, updated_at FROM products WHERE brand_id = ?`
+	err, data := r.Fetch(ctx, query, id)
+
+	if err != nil {
+		logger.ErrorLogger.Println(loc + err.Error())
+		return err, nil
+	}
+
+	logger.InfoLogger.Println(loc + "Successfully get data")
+	return nil, data
+}

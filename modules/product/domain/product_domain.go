@@ -49,3 +49,13 @@ func (uc *ProductDomain) Create(ctx context.Context, data *product.Entity) error
 	
 	return nil
 }
+
+func (uc *ProductDomain) GetByBrand(ctx context.Context, id int) (error, []*product.Entity) {
+	err, products := uc.productRepository.GetByBrand(ctx, id)
+
+	if err != nil {
+		return err, nil
+	}
+
+	return nil, products
+}
