@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/FauzanAr/clean-and-go/helpers/response"
 	"github.com/FauzanAr/clean-and-go/modules/brand"
 )
 
@@ -31,9 +32,19 @@ func (d *BrandDomain) Create(ctx context.Context, data *brand.Entity) error {
 	data.CreatedAt = int(time.Now().Unix())
 	data.UpdatedAt = int(time.Now().Unix())
 
-	err := d.brandRepository.Insert(ctx, data)
+	err, nameExist := d.brandRepository.GetByName(ctx, data.Name)
 
 	if err != nil {
+		return err
+	}
+
+	if nameExist != nil {
+		return response.BadRequest("Brand name already taken")
+	}
+
+	errInsert := d.brandRepository.Insert(ctx, data)
+
+	if errInsert != nil {
 		return err
 	}
 

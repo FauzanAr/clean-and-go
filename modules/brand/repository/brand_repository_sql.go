@@ -94,3 +94,22 @@ func (r *BrandRepositoryMysql) Insert(ctx context.Context, b *brand.Entity) erro
 
 	return nil
 }
+
+func (r *BrandRepositoryMysql) GetByName(ctx context.Context, name string) (error, *brand.Entity) {
+	loc := "[BrandRepository-GetByName]"
+	query := `SELECT id, name, description, created_at, updated_at FROM brands WHERE name = ?`
+	err, data := r.Fetch(ctx, query, name)
+
+	if err != nil {
+		logger.ErrorLogger.Println(loc + err.Error())
+		return err, nil
+	}
+
+	if len(data) > 0 {
+		logger.InfoLogger.Println(loc + "Successfully get data")
+		return nil, data[0]
+	}
+
+	logger.InfoLogger.Println(loc + "Successfully get data, got nil")
+	return nil, nil
+}

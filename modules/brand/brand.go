@@ -10,6 +10,7 @@ type Repository interface {
 	Fetch(ctx context.Context, query string, args ...interface{}) (error, []*Entity)
 	GetAll(ctx context.Context) (error, []*Entity)
 	Insert(ctx context.Context, data *Entity) error
+	GetByName(ctx context.Context, name string) (error, *Entity)
 }
 
 type Domain interface {
