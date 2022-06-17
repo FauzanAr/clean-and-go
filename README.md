@@ -13,4 +13,3 @@ $ go run server.go
 ```
 ## Finish and Go
 Don't forget to install or prepare Mysql database on board!
-<a name="Clean and go">Go Up</a>
